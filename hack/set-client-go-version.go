@@ -15,10 +15,14 @@ import (
 	"text/template"
 )
 
+const (
+	Repo = "client-go"
+)
+
 var usageTemplate = template.Must(template.
 	New("--help").
 	Parse(`Usage: {{ .Arg0 }} VERSION\n", arg0)
-Overwrite go.mod, to use the specified version of k8s.io/client-go
+Overwrite go.mod, to use the specified version of k8s.io/` + Repo + `
 
 Examples:
     {{ .Arg0 }} v11.0.0                                  # tag
@@ -38,7 +42,7 @@ module github.com/datawire/libk8s
 go {{ trimPrefix .Godep.GoVersion "go" }}
 
 require (
-	k8s.io/client-go {{ .Version }}
+	k8s.io/` + Repo + ` {{ .Version }}
 {{- range $dep := .Godep.Deps }}
 	{{ pkg2mod $dep.ImportPath }} {{ $dep.Rev }}
 {{- end }}
@@ -70,7 +74,7 @@ type Godep struct {
 }
 
 func getGodep(version string) (Godep, error) {
-	resp, err := http.Get("https://raw.githubusercontent.com/kubernetes/client-go/" + version + "/Godeps/Godeps.json")
+	resp, err := http.Get("https://raw.githubusercontent.com/kubernetes/" + Repo + "/" + version + "/Godeps/Godeps.json")
 	if err != nil {
 		return Godep{}, err
 	}
