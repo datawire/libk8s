@@ -74,27 +74,28 @@ type Godep struct {
 }
 
 func getGodep(version string) (Godep, error) {
-	resp, err := http.Get("https://raw.githubusercontent.com/kubernetes/" + Repo + "/" + version + "/Godeps/Godeps.json")
+	url := "https://raw.githubusercontent.com/kubernetes/" + Repo + "/" + version + "/Godeps/Godeps.json"
+	resp, err := http.Get(url)
 	if err != nil {
-		return Godep{}, err
+		return Godep{}, fmt.Errorf("%v %v", url, err)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return Godep{}, fmt.Errorf("HTTP %v", resp.StatusCode)
+		return Godep{}, fmt.Errorf("%v HTTP %v", url, resp.StatusCode)
 	}
 
 	godepBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return Godep{}, err
+		return Godep{}, fmt.Errorf("%v %v", url, err)
 	}
 
 	var godepStruct Godep
 	if err := json.Unmarshal(godepBytes, &godepStruct); err != nil {
-		return Godep{}, err
+		return Godep{}, fmt.Errorf("%v %v", url, err)
 	}
 
-	return godepStruct, err
+	return godepStruct, nil
 }
 
 func pkg2mod(pkg string) string {
@@ -120,7 +121,7 @@ func pkg2mod(pkg string) string {
 func Main(arg0, version string) error {
 	godep, err := getGodep(version)
 	if err != nil {
-		return fmt.Errorf("get Godep: %v", err)
+		return err
 	}
 
 	// Do this in "." instead of os.TempDir ($TMPDIR or /tmp) so
