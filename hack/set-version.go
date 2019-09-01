@@ -17,7 +17,7 @@ import (
 )
 
 const (
-	Repo = "client-go"
+	Repo = "cli-runtime"
 )
 
 var usageTemplate = template.Must(template.
@@ -31,9 +31,9 @@ be a full 40-character commit hash, or a full ref name (starting with
 "ref/").
 
 Examples:
-    {{ .Arg0 }} refs/heads/release-11.0                   # branch
-    {{ .Arg0 }} refs/tags/v11.0.0                         # tag
-    {{ .Arg0 }} cbfe85d220c2dcb691a9ed0fa7f3c1bbb8bd7912  # commit
+    {{ .Arg0 }} refs/heads/release-1.14                   # branch
+    {{ .Arg0 }} refs/tags/kubernetes-1.14.6               # tag
+    {{ .Arg0 }} 59d96aa1e208aaaaafb5d528dc5720e9e7b5c07e  # commit
 `))
 
 var goModTemplate = template.Must(template.
@@ -46,12 +46,14 @@ var goModTemplate = template.Must(template.
 
 module github.com/datawire/libk8s
 
-go {{ trimPrefix .Godep.GoVersion "go" }}
+go {{ trimPrefix (index .Godeps 0).GoVersion "go" }}
 
 require (
 	k8s.io/` + Repo + ` {{ .Commit }}
-{{- range $dep := .Godep.Deps }}
+{{- range $manifest := .Godeps }}
+{{- range $dep := $manifest.Deps }}
 	{{ pkg2mod $dep.ImportPath }} {{ $dep.Rev }}
+{{- end }}
 {{- end }}
 )
 `))
@@ -80,8 +82,8 @@ type Godep struct {
 	}
 }
 
-func getGodep(version string) (Godep, error) {
-	url := "https://raw.githubusercontent.com/kubernetes/" + Repo + "/" + version + "/Godeps/Godeps.json"
+func getGodep(repo, commit string) (Godep, error) {
+	url := "https://raw.githubusercontent.com/kubernetes/" + repo + "/" + commit + "/Godeps/Godeps.json"
 	resp, err := http.Get(url)
 	if err != nil {
 		return Godep{}, fmt.Errorf("%v %v", url, err)
@@ -167,9 +169,20 @@ func Main(arg0, version string) error {
 		return err
 	}
 
-	godep, err := getGodep(commit)
+	godep, err := getGodep(Repo, commit)
 	if err != nil {
 		return err
+	}
+
+	godeps := []Godep{godep}
+	for _, dep := range godep.Deps {
+		if dep.ImportPath == "k8s.io/client-go" || strings.HasPrefix(dep.ImportPath, "k8s.io/client-go/") {
+			cgGodep, err := getGodep("client-go", dep.Rev)
+			if err != nil {
+				return err
+			}
+			godeps = append(godeps, cgGodep)
+		}
 	}
 
 	// Do this in "." instead of os.TempDir ($TMPDIR or /tmp) so
@@ -189,14 +202,14 @@ func Main(arg0, version string) error {
 	err = goModTemplate.Execute(goMod, map[string]interface{}{
 		"Cmdline": fmt.Sprintf("%s %q", arg0, version),
 		"Commit":  commit,
-		"Godep":   godep,
+		"Godeps":  godeps,
 	})
 	goMod.Close()
 	if err != nil {
 		return fmt.Errorf("write go.mod: %v", err)
 	}
 
-	cmd := exec.Command("go", "list", "-deps", `-f={{ if and (not .Standard) (ne .Name "main") (gt (len .GoFiles) 0) }}{{ .ImportPath }}{{ end }}`, "k8s.io/client-go/...")
+	cmd := exec.Command("go", "list", "-deps", `-f={{ if and (not .Standard) (ne .Name "main") (gt (len .GoFiles) 0) }}{{ .ImportPath }}{{ end }}`, "k8s.io/cli-runtime/...", "k8s.io/client-go/...")
 	cmd.Dir = tmpdir
 	cmd.Stderr = os.Stderr
 	allPkgsBytes, err := cmd.Output()
@@ -251,7 +264,7 @@ func Main(arg0, version string) error {
 }
 
 func main() {
-	arg0 := "go run ./hack/set-client-go-version.go"
+	arg0 := "go run ./hack/set-version.go"
 	if len(os.Args) != 2 {
 		_ = usageTemplate.Execute(os.Stderr, map[string]interface{}{
 			"Arg0": arg0,
