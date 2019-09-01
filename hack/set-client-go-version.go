@@ -158,7 +158,7 @@ func Main(arg0, version string) error {
 		return fmt.Errorf("go build: %v", err)
 	}
 
-	cmd = exec.Command("go", "list", "-deps", "-f={{ if not .Standard }}{{ .ImportPath }}{{ end }}", "k8s.io/client-go/...")
+	cmd = exec.Command("go", "list", "-deps", `-f={{ if and (not .Standard) (ne .Name "main") (gt (len .GoFiles) 0) }}{{ .ImportPath }}{{ end }}`, "k8s.io/client-go/...")
 	cmd.Dir = tmpdir
 	cmd.Stderr = os.Stderr
 	allPkgsBytes, err := cmd.Output()
@@ -167,9 +167,13 @@ func Main(arg0, version string) error {
 	}
 	var allPkgs []string
 	for _, line := range strings.Split(string(allPkgsBytes), "\n") {
-		if line != "" {
-			allPkgs = append(allPkgs, line)
+		if line == "" {
+			continue
 		}
+		if strings.Contains(line, "/internal/") || strings.HasSuffix(line, "/internal") {
+			continue
+		}
+		allPkgs = append(allPkgs, line)
 	}
 	sort.Strings(allPkgs)
 
