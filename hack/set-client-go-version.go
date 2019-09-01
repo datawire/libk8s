@@ -181,6 +181,13 @@ func Main(arg0, version string) error {
 		return fmt.Errorf("write pin.go: %v", err)
 	}
 
+	cmd = exec.Command("go", "mod", "tidy")
+	cmd.Dir = tmpdir
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("go mod tidy: %v", err)
+	}
+
 	if err := os.Rename(filepath.Join(tmpdir, "go.mod"), "go.mod"); err != nil {
 		return err
 	}
