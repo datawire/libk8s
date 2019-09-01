@@ -151,14 +151,7 @@ func Main(arg0, version string) error {
 		return fmt.Errorf("write go.mod: %v", err)
 	}
 
-	cmd := exec.Command("go", "build", "k8s.io/client-go/...")
-	cmd.Dir = tmpdir
-	cmd.Stderr = os.Stderr
-	if err := cmd.Run(); err != nil {
-		return fmt.Errorf("go build: %v", err)
-	}
-
-	cmd = exec.Command("go", "list", "-deps", `-f={{ if and (not .Standard) (ne .Name "main") (gt (len .GoFiles) 0) }}{{ .ImportPath }}{{ end }}`, "k8s.io/client-go/...")
+	cmd := exec.Command("go", "list", "-deps", `-f={{ if and (not .Standard) (ne .Name "main") (gt (len .GoFiles) 0) }}{{ .ImportPath }}{{ end }}`, "k8s.io/client-go/...")
 	cmd.Dir = tmpdir
 	cmd.Stderr = os.Stderr
 	allPkgsBytes, err := cmd.Output()
