@@ -4,9 +4,9 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/datawire/libk8s)](https://goreportcard.com/report/github.com/datawire/libk8s)
 [![CircleCI](https://circleci.com/gh/datawire/libk8s.svg)](https://circleci.com/gh/datawire/libk8s)
 
-Right now it just makes dealing with the dependency list a little more
-sane.  Maybe in the future [`github.com/datawire/teleproxy/pkg/k8s`][]
-will migrate to here.
+Right now libk8s just makes dealing with crazy dependency list of
+`k8s.io/client-go` a little bit easier.  Maybe in the future
+[`github.com/datawire/teleproxy/pkg/k8s`][] will migrate to here.
 
 [`github.com/datawire/teleproxy/pkg/k8s`]: https://godoc.org/github.com/datawire/teleproxy/pkg/k8s
 
@@ -19,7 +19,7 @@ will migrate to here.
     version of.
  3. Run `go mod tidy` again to bring everything back in to alignment.
 
-## Hacking on libk8s.
+## Hacking on libk8s
 
 Most of libk8s is generated from `k8s.io/client-go`'s Godep files by
 the `go run ./generate-libk8s.go` script (which is called by `make`,
