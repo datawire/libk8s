@@ -12,12 +12,20 @@ Right now libk8s just makes dealing with crazy dependency list of
 
 ## Using libk8s
 
+### Adding libk8s
+
  1. Stick `_ "github.com/datawire/libk8s"` in the `imports ()`
     section of one of your `.go` files.
  2. Run `go run github.com/datawire/libk8s/cmd/fix-go.mod` to
     downgrade anything that `k8s.io/client-go` wants to use an older
     version of.
  3. Run `go mod tidy` again to bring everything back in to alignment.
+
+### Upgrading/downgrading libk8s
+
+ 1. Run `go mod edit -require=github.com/datawire/libk8s@THE_VERSION_THAT_YOU_WANT`
+ 2. Run `go run github.com/datawire/libk8s/cmd/fix-go.mod`
+ 3. Run `go mod tidy`
 
 ## Hacking on libk8s
 
