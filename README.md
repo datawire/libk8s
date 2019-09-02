@@ -1,4 +1,8 @@
-# libk8s - A wrapper around `k8s.io/client-go` [![CircleCI](https://circleci.com/gh/datawire/libk8s.svg)](https://circleci.com/gh/datawire/libk8s)
+# libk8s - A wrapper around `k8s.io/client-go`
+
+[![GoDoc](https://godoc.org/github.com/datawire/libk8s?status.svg)](https://godoc.org/github.com/datawire/libk8s)
+[![Go Report Card](https://goreportcard.com/badge/github.com/datawire/libk8s)](https://goreportcard.com/report/github.com/datawire/libk8s)
+[![CircleCI](https://circleci.com/gh/datawire/libk8s.svg)](https://circleci.com/gh/datawire/libk8s)
 
 Right now it just makes dealing with the dependency list a little more
 sane.  Maybe in the future [`github.com/datawire/teleproxy/pkg/k8s`][]
