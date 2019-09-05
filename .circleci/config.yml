@@ -4,14 +4,14 @@ jobs:
 
   "build":
     docker:
-      - image: golang:1.13rc2
+      - image: golang:1.13
     steps:
       - checkout
       - run: make clobber
       - run: make generate
+      - run: go build ./...
       - run: |
           if test -n "$(git status -s)"; then
             git status
             exit 1
           fi
-      - run: go build ./...
