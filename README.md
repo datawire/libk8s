@@ -19,7 +19,7 @@ Right now libk8s just makes dealing with crazy dependency list of
  2. Run `go run github.com/datawire/libk8s/cmd/fix-go.mod` to
     downgrade anything that `k8s.io/client-go` wants to use an older
     version of.
- 3. Run `go mod tidy` again to bring everything back in to alignment.
+ 3. Run `go mod tidy` to bring everything back in to alignment.
 
 ### Upgrading/downgrading libk8s
 
