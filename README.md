@@ -39,6 +39,5 @@ for convenience).  The only "actual" files to edit are:
  - `README.md`
  - `.gitignore`
 
-I advise that use Go 1.13 when running `make` (even though it's still
-in RC2 at the time of this writing).  It does a better job of
-resolving commit hashes to tags than 1.12.9 does.
+I advise that you use Go 1.13 when running `make`.  It does a better
+job of resolving commit hashes to tags than 1.12.9 does.
