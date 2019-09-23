@@ -12,8 +12,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1
 	github.com/dgrijalva/jwt-go v3.0.1-0.20160705203006-01aeca54ebda+incompatible
 	github.com/docker/spdystream v0.0.0-20160310174837-449fdfce4d96
-	github.com/elazarl/goproxy v0.0.0-20190711103511-473e67f1d7d2 // indirect
-	github.com/elazarl/goproxy/ext v0.0.0-20190711103511-473e67f1d7d2 // indirect
+	github.com/elazarl/goproxy v0.0.0-20190911111923-ecfe977594f1 // indirect
 	github.com/emicklei/go-restful v1.1.4-0.20170410110728-ff4f55a20633
 	github.com/evanphx/json-patch v4.2.0+incompatible
 	github.com/ghodss/yaml v1.0.1-0.20180820084758-c7ce16629ff4
@@ -49,7 +48,7 @@ require (
 	golang.org/x/sys v0.0.0-20190606165138-5da285871e9c
 	golang.org/x/text v0.3.2
 	golang.org/x/time v0.0.0-20161028155119-f51c12702a4d
-	google.golang.org/appengine v1.6.2 // indirect
+	google.golang.org/appengine v1.6.3 // indirect
 	gopkg.in/inf.v0 v0.9.0
 	gopkg.in/yaml.v2 v2.2.1
 	k8s.io/api v0.0.0-20190816221958-51687e09eeea

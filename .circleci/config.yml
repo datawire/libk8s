@@ -12,6 +12,7 @@ jobs:
       - run: go build ./...
       - run: |
           if test -n "$(git status -s)"; then
-            git status
+            git add .
+            PAGER= git diff --cached
             exit 1
           fi
