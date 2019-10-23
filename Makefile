@@ -9,7 +9,7 @@ generate: $(addprefix $(CURDIR)/,$(generated))
 $(addprefix %/,$(generated)): %/cmd/generate-libk8s FORCE
 	rm -f go.mod
 	go mod init github.com/datawire/libk8s
-	go run $< refs/heads/release-1.15
+	go run $< refs/heads/release-1.16
 
 clobber:
 	rm -f $(generated)

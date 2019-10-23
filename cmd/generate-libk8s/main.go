@@ -174,7 +174,7 @@ func stage0(commit string) (gomod.GoMod, error) {
 				return err
 			}
 
-			if pkg.Module.Path == "k8s.io/klog" || pkg.Module.Path == "k8s.io/utils" {
+			if pkg.Module.Path == "k8s.io/klog" || pkg.Module.Path == "k8s.io/utils" || pkg.Module.Path == "k8s.io/gengo" {
 				if _, err := os.Stat(filepath.Join(pkg.Module.Dir, "go.mod")); err != nil {
 					continue
 				}

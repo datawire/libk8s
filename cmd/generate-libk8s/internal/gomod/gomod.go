@@ -73,7 +73,11 @@ func GetDir(modname, version string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	if _, err := fmt.Fprintln(goMod, "module tmp\n\nrequire", modname, version); err != nil {
+	// The k8s.io/klog is a special hack to make sure that we
+	// don't get an old commit in the middle of a module rename.
+	if _, err := fmt.Fprintln(goMod, `module tmp
+require k8s.io/klog v0.1.0
+require`, modname, version); err != nil {
 		return "", fmt.Errorf("write go.mod: %v", err)
 	}
 
