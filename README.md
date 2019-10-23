@@ -30,11 +30,11 @@ Right now libk8s just makes dealing with crazy dependency list of
 ## Hacking on libk8s
 
 Most of libk8s is generated from `k8s.io/client-go`'s Godep files by
-the `go run ./generate-libk8s.go` script (which is called by `make`,
+the `go run ./cmd/generate-libk8s` script (which is called by `make`,
 for convenience).  The only "actual" files to edit are:
 
  - `Makefile`
- - `generate-libk8s.go`
+ - `cmd/generate-libk8s/*.go`
  - `cmd/fix-go.mod/main.go`
  - `README.md`
  - `.gitignore`
