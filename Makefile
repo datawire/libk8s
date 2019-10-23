@@ -6,7 +6,7 @@ generated += cmd/fix-go.mod/versions.go
 generate: $(addprefix $(CURDIR)/,$(generated))
 .PHONY: generate
 
-$(addprefix %/,$(generated)): %/generate-libk8s.go
+$(addprefix %/,$(generated)): %/generate-libk8s.go $(MAKEFILE_LIST)
 	go run $< refs/heads/release-1.14
 
 clobber:
