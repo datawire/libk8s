@@ -17,9 +17,12 @@ import (
 	"github.com/datawire/libk8s/cmd/generate-libk8s/internal/gomod"
 )
 
-const (
-	StartRepo = "cli-runtime"
-)
+const StartRepo = "cli-runtime"
+
+var PinnedPackages = []string{
+	"k8s.io/cli-runtime/...",
+	"k8s.io/client-go/...",
+}
 
 var usageTemplate = template.Must(template.
 	New("--help").
@@ -220,7 +223,7 @@ func stage1(mergedGoMod gomod.GoMod) ([]golist.Package, error) {
 		return nil, fmt.Errorf("write go.mod: %v", err)
 	}
 
-	pkgs, err := golist.ListPackages(tmpdir, "-deps", "k8s.io/cli-runtime/...", "k8s.io/client-go/...")
+	pkgs, err := golist.ListPackages(tmpdir, append([]string{"-deps"}, PinnedPackages...)...)
 	if err != nil {
 		return nil, fmt.Errorf("go list: %v", err)
 	}
