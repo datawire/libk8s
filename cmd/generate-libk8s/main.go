@@ -17,9 +17,10 @@ import (
 	"github.com/datawire/libk8s/cmd/generate-libk8s/internal/gomod"
 )
 
-const StartRepo = "cli-runtime"
+const StartRepo = "kubectl"
 
 var PinnedPackages = []string{
+	"k8s.io/kubectl/...",
 	"k8s.io/cli-runtime/...",
 	"k8s.io/client-go/...",
 }
