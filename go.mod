@@ -42,11 +42,11 @@ require (
 	github.com/pkg/errors v0.8.1
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/pflag v1.0.5
-	golang.org/x/crypto v0.0.0-20200220183623-bac4c82f6975
-	golang.org/x/net v0.0.0-20191004110552-13f9640d40b9
+	golang.org/x/crypto v0.1.0
+	golang.org/x/net v0.1.0
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45
-	golang.org/x/sys v0.0.0-20190813064441-fde4db37ae7a
-	golang.org/x/text v0.3.2
+	golang.org/x/sys v0.1.0
+	golang.org/x/text v0.4.0
 	golang.org/x/time v0.0.0-20190308202827-9d24e82272b4
 	gopkg.in/inf.v0 v0.9.1
 	gopkg.in/yaml.v2 v2.2.8
